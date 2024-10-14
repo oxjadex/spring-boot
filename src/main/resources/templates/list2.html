@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="/style.css" />
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+  <div class="card" th:each="i : ${item2}">
+    <h4 th:text="${i.id}"></h4>
+    <h4 th:text="${i.title}"></h4>
+    <h4 th:text="${i.date}"></h4>
+  </div>
+</body>
+</html>

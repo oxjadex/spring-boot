@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+<div th:replace="~{nav.html :: navbar}"></div>
+    <div class="card" th:each="i : ${item}">
+        <h4 th:text="${i.id}"></h4>
+        <a th:href="@{'/edit/' + ${i.id} }">★</a>
+        <div style="cursor:pointer"
+             th:onclick="fetch('/delete?id=[[${i.id}]]', {method: 'DELETE'}).then(() => location.reload())">☆</div>
+        <a th:href="@{'/detail/' + ${i.id} }">
+            <h4 th:text="${i.title}"></h4>
+        </a>
+        <h4 th:text="${i.price}"></h4>
+    </div>
+    <script>
+
+    </script>
+</script>
+</body>
+</html>
