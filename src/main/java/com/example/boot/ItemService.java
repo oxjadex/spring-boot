@@ -1,9 +1,9 @@
 package com.example.boot;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Member;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,11 +43,16 @@ public class ItemService {
         itemRepository.deleteById(id);
     }
 
-    public void login(String username, String password, String displayName){
+    public void login(String username, String password, String displayName) throws BadRequestException {
         Members member = new Members();
+
         member.setUsername(username);
         member.setPassword(password);
         member.setDisplayName(displayName);
         memberRepository.save(member);
+    }
+
+    public boolean isFindMemberByUsername(String username){
+        return memberRepository.findByUsername(username).isPresent();
     }
 }

@@ -2,13 +2,13 @@ package com.example.boot;
 
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.apache.coyote.BadRequestException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @ToString
@@ -16,6 +16,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ItemController {
     private final ItemService itemService;
+    private final PasswordEncoder passwordEncoder;
 
     @GetMapping("/list")
     String List(Model model) {
@@ -69,17 +70,24 @@ public class ItemController {
         return "redirect:/list";
     }
 
-    @GetMapping("/login")
-    String login() {
-        return "login";
+    @GetMapping("/register")
+    String register() {
+        return "register";
     }
 
     @PostMapping("/loginAdd")
-    String loginAdd(String username, String password, String displayName) {
-        var encoder = new BCryptPasswordEncoder();
-        String encodePassword = encoder.encode(password);
+    String loginAdd(String username, String password, String displayName) throws BadRequestException {
+        if (itemService.isFindMemberByUsername(username)) throw new BadRequestException("아이디가 겹침");
+        if (password.length()< 8) throw new BadRequestException("password가 8자리 미만");
+        if (username.length()< 8) throw new BadRequestException("username이 8자리 미만");
+        String encodePassword = passwordEncoder.encode(password);
         itemService.login(username, encodePassword, displayName);
 
         return "redirect:/list";
+    }
+
+    @GetMapping("/login")
+    String login() {
+        return "login.html";
     }
 }
