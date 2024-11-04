@@ -3,6 +3,8 @@ package com.example.boot;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import org.apache.coyote.BadRequestException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,8 +34,8 @@ public class ItemController {
     }
 
     @PostMapping("/add")
-    String writePost(String title, Integer price) {
-        itemService.saveItem(title, price);
+    String writePost(String title, int price, Authentication auth) {
+        itemService.saveItem(title, price, auth.getName());
         return "redirect:/list";
     }
 
@@ -70,10 +72,6 @@ public class ItemController {
         return "redirect:/list";
     }
 
-    @GetMapping("/register")
-    String register() {
-        return "register";
-    }
 
     @PostMapping("/loginAdd")
     String loginAdd(String username, String password, String displayName) throws BadRequestException {
@@ -82,7 +80,7 @@ public class ItemController {
         if (username.length()< 8) throw new BadRequestException("username이 8자리 미만");
         String encodePassword = passwordEncoder.encode(password);
         itemService.login(username, encodePassword, displayName);
-
+        System.out.println("회언가입 성공");
         return "redirect:/list";
     }
 
@@ -90,4 +88,30 @@ public class ItemController {
     String login() {
         return "login.html";
     }
+
+    @GetMapping("/signup")
+    public String signup(Authentication auth) {
+        if (auth != null && auth.isAuthenticated()) {
+            return "redirect:/list";
+        }
+        return "signup.html";
+    }
+
+    @GetMapping("/my-page")
+    public String myPage(Authentication auth) {
+        System.out.println(auth);
+        System.out.println(auth.getName()); //아이디출력가능
+        System.out.println(auth.isAuthenticated()); //로그인여부 검사가능
+        System.out.println(auth.getAuthorities().contains(new SimpleGrantedAuthority("일반유저")));
+        return "mypage.html";
+    }
+
+    @GetMapping("/register")
+    public String register(Authentication auth) {
+        if(auth!=null){
+            return "redirect:/list";
+        }
+        return "register";
+    }
+
 }
