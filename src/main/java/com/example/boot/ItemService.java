@@ -14,10 +14,11 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final MembersRepositry memberRepository;
 
-    public void saveItem(String title, Integer price){
+    public void saveItem(String title, Integer price, String username){
         Item item = new Item();
         item.setTitle(title);
         item.setPrice(price);
+        item.setUsername(username);
         itemRepository.save(item);
     }
 
