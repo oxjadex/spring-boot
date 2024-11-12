@@ -9,9 +9,12 @@
   <h4>아이디나 비번 틀림</h4>
 </div>
 <form action="/login" method="POST">
-  <input name="username">
-  <input name="password" type="password">
-  <button type="submit">전송</button>
+    <label>
+        <input name="username">
+    </label>
+    <input name="password" type="password">
+<!--    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">-->
+    <button type="submit">전송</button>
 </form>
 </body>
 </html>

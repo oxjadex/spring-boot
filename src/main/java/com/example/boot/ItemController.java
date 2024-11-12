@@ -19,6 +19,7 @@ import java.util.Optional;
 public class ItemController {
     private final ItemService itemService;
     private final PasswordEncoder passwordEncoder;
+    private final MembersRepositry membersRepositry;
 
     @GetMapping("/list")
     String List(Model model) {
@@ -99,11 +100,13 @@ public class ItemController {
 
     @GetMapping("/my-page")
     public String myPage(Authentication auth) {
-        System.out.println(auth);
-        System.out.println(auth.getName()); //아이디출력가능
-        System.out.println(auth.isAuthenticated()); //로그인여부 검사가능
-        System.out.println(auth.getAuthorities().contains(new SimpleGrantedAuthority("일반유저")));
-        return "mypage.html";
+        if(auth!=null) {
+            CustomUser user = (CustomUser) auth.getPrincipal();
+            System.out.println(user.displayName);
+            System.out.println(user.id);
+            return "mypage";
+        }
+        return "redirect:/list";
     }
 
     @GetMapping("/register")
@@ -114,4 +117,21 @@ public class ItemController {
         return "register";
     }
 
+    @GetMapping("/user/1")
+    public MemberDTO user() {
+        Optional<Members> a= membersRepositry.findById(1);
+        var result = a.get();
+        var data = new MemberDTO(result.getUsername(), result.getDisplayName());
+        return data;
+    }
+
+    class MemberDTO {
+        public String username;
+        public String displayName;
+
+        MemberDTO(String username, String displayName) {
+            this.username = username;
+            this.displayName = displayName;
+        }
+    }
 }
