@@ -17,9 +17,12 @@
         </a>
         <h4 th:text="${i.price}"></h4>
     </div>
-    <script>
-
-    </script>
-</script>
+    <div class="pagings">
+        <div class="paging" th:each="pages, p : ${#numbers.sequence(1, pages)}">
+            <a th:href="@{'/list/page/' + ${p.count}}">
+                <h4 th:text="${p.count}"></h4>
+            </a>
+        </div>
+    </div>
 </body>
 </html>

@@ -3,6 +3,8 @@ package com.example.boot;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import org.apache.coyote.BadRequestException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,11 +22,14 @@ public class ItemController {
     private final ItemService itemService;
     private final PasswordEncoder passwordEncoder;
     private final MembersRepositry membersRepositry;
+    private final ItemRepository itemRepository;
 
     @GetMapping("/list")
     String List(Model model) {
         List<Item> result = itemService.findAllItem();
+        Page<Item> page =  itemRepository.findPageBy(PageRequest.of(0, 5));
         model.addAttribute("item", result);
+        model.addAttribute("pages", page.getTotalPages());
         System.out.println(result);
         return "list";
     }
@@ -118,6 +123,7 @@ public class ItemController {
     }
 
     @GetMapping("/user/1")
+    @ResponseBody
     public MemberDTO user() {
         Optional<Members> a= membersRepositry.findById(1);
         var result = a.get();
@@ -133,5 +139,13 @@ public class ItemController {
             this.username = username;
             this.displayName = displayName;
         }
+    }
+
+    @GetMapping("/list/page/{id}")
+    String getListPage1(@PathVariable Integer id, Model model) {
+        Page<Item> result =  itemRepository.findPageBy(PageRequest.of(id-1,5));
+        model.addAttribute("item", result);
+        model.addAttribute("pages", result.getTotalPages());
+        return "list.html";
     }
 }

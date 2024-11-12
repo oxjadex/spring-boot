@@ -1,15 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;800&display=swap');
-
 .card {
     display: flex;
     margin : 30px auto;
     gap: 30px;
     justify-content: center;
 }
+
 .card img {
     width : 150px;
     margin-right : 20px;
 }
+
 form {
     padding: 10px;
 }
@@ -19,12 +19,13 @@ form {
     padding: 10px;
     align-items: center;
 }
+
 .nav a {
     margin-right: 10px;
     text-decoration : none;
     font-weight : 400;
-    letter-spacing : -0.5px;
 }
+
 .nav .logo {
     font-weight : 400;
 }
@@ -56,4 +57,16 @@ input {
     max-width : 30%;
     display : block;
     margin : auto;
+}
+
+.paging {
+    display: flex;
+}
+
+.pagings{
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    justify-content: center;
+
 }
