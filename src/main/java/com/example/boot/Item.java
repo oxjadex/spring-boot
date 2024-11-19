@@ -11,11 +11,11 @@ import lombok.Setter;
 public class Item {
     @Id
 //    primary key로
-    @GeneratedValue
-            (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String title;
     private Integer price;
     private String username;
+    private String image;
 }
 

@@ -20,17 +20,19 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ItemController {
     private final ItemService itemService;
+    private final CommentService commentService;
     private final PasswordEncoder passwordEncoder;
     private final MembersRepositry membersRepositry;
     private final ItemRepository itemRepository;
+    private final S3Service s3Service;
 
     @GetMapping("/list")
     String List(Model model) {
-        List<Item> result = itemService.findAllItem();
-        Page<Item> page =  itemRepository.findPageBy(PageRequest.of(0, 5));
+        Page<Item> result =  itemRepository.findPageBy(PageRequest.of(0,5));
         model.addAttribute("item", result);
-        model.addAttribute("pages", page.getTotalPages());
-        System.out.println(result);
+        model.addAttribute("pages", result.getTotalPages());
+        var result1 = itemRepository.findById(29);
+        model.addAttribute("item1", result1);
         return "list";
     }
 
@@ -40,8 +42,8 @@ public class ItemController {
     }
 
     @PostMapping("/add")
-    String writePost(String title, int price, Authentication auth) {
-        itemService.saveItem(title, price, auth.getName());
+    String writePost(String title, int price, String img, Authentication auth) {
+        itemService.saveItem(title, price, img, auth.getName());
         return "redirect:/list";
     }
 
@@ -52,6 +54,10 @@ public class ItemController {
             model.addAttribute("item", result.get());
             return "detail";
         }
+        var comments =commentService.findByParentId(id);
+        System.out.println("comment" + comments);
+        System.out.println("값이 오지않음");
+        model.addAttribute("comments", comments);
         return "redirect:/list";
     }
 
@@ -107,8 +113,6 @@ public class ItemController {
     public String myPage(Authentication auth) {
         if(auth!=null) {
             CustomUser user = (CustomUser) auth.getPrincipal();
-            System.out.println(user.displayName);
-            System.out.println(user.id);
             return "mypage";
         }
         return "redirect:/list";
@@ -146,6 +150,16 @@ public class ItemController {
         Page<Item> result =  itemRepository.findPageBy(PageRequest.of(id-1,5));
         model.addAttribute("item", result);
         model.addAttribute("pages", result.getTotalPages());
-        return "list.html";
+        return "list";
     }
+
+
+    @GetMapping("/presigned-url")
+    @ResponseBody
+    String getURL(@RequestParam String filename){
+        var result = s3Service.createPresignedUrl("oharin/" + filename);
+        return result;
+    }
+
+
 }

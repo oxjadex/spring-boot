@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>detail</title>
     <link rel="stylesheet" href="/style.css" />
 </head>
 <body>
@@ -11,6 +11,15 @@
     <h4 th:text="${i.id}"></h4>
     <h4 th:text="${i.title}"></h4>
     <h4 th:text="${i.price}"></h4>
+    <img th:src="${i.image}" alt="img" />
+  </div>
+  <form action="/add-comment" method="POST">
+      <input name="content">
+      <input name="parentId" th:value="${item.id}" type="hidden">
+      <button type="submit">댓글 달기</button>
+  </form>
+  <div class="detail" th:each="c : ${comments}">
+      <h4 th:text="${c.content}"></h4>
   </div>
 </body>
 </html>

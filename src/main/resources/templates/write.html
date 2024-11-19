@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>write</title>
     <link rel="stylesheet" href="/style.css" />
 
 </head>
@@ -11,7 +11,29 @@
     <form action="/add" method="POST">
         <input name="title" >
         <input name="price" >
+        <input type="file" onchange="getURL(this)">
+        <input type="hidden" name ="img">
         <button type="submit">버튼</button>
     </form>
+
+    <script>
+        async function getURL(e){
+            let file = e.files[0]
+            let name = encodeURIComponent(file.name)
+            let result = await fetch('/presigned-url?filename=' + name)
+            // 이거 시험 내시는건가...
+            // 언제 s3 버킷에 요청이가고 사진이 들어가는지
+            result = await result.text()
+
+            result = await fetch(result, {
+                method: 'PUT',
+                body: e.files[0]
+            })
+
+            if (result.ok) {
+                document.querySelector('input[name="img"]').value =  result.url.split("?")[0];
+            }
+        }
+    </script>
 </body>
 </html>

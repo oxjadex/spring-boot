@@ -17,9 +17,7 @@ public class Item2Controller {
     @GetMapping("/item2")
     String item2(Model model) {
         List<Item2> result = item2Repository.findAll();
-        System.out.println(result);
         model.addAttribute("item2", result);
-        System.out.println(result);
         return "list2.html";
     }
 }
