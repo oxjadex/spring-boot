@@ -19,10 +19,10 @@ public class CommentService {
         commentRepository.save(comment);
     }
 
-    public List<comment> findByParentId(Integer parentId) {
-        System.out.println("findByParentId 호출됨, parentId: " + parentId);
-        List<comment> comments = commentRepository.findAllByParentId(parentId);
-        System.out.println("DB에서 가져온 댓글: " + comments);
-        return comments;
-    }
+//    public List<comment> findByParentId(Integer parentId) {
+//        System.out.println("findByParentId 호출됨, parentId: " + parentId);
+//        List<comment> comments = commentRepository.findAllByParentId(parentId);
+//        System.out.println("DB에서 가져온 댓글: " + comments);
+//        return comments;
+//    }
 }

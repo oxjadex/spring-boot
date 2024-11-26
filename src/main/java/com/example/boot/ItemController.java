@@ -21,6 +21,7 @@ import java.util.Optional;
 public class ItemController {
     private final ItemService itemService;
     private final CommentService commentService;
+    private final CommentRepository commentRepository;
     private final PasswordEncoder passwordEncoder;
     private final MembersRepositry membersRepositry;
     private final ItemRepository itemRepository;
@@ -49,17 +50,20 @@ public class ItemController {
 
     @GetMapping("/detail/{id}")
     String detail(@PathVariable Integer id, Model model) {
+        System.out.println("detail 메서드 호출됨, id: " + id); // 첫 번째 로그
         Optional<Item> result = itemService.findItemById(id);
+
         if (result.isPresent()) {
             model.addAttribute("item", result.get());
+            var comments = commentRepository.findAllByParentId(id);
+            model.addAttribute("comments", comments);
             return "detail";
         }
-        var comments =commentService.findByParentId(id);
-        System.out.println("comment" + comments);
-        System.out.println("값이 오지않음");
-        model.addAttribute("comments", comments);
+
+
         return "redirect:/list";
     }
+
 
     @GetMapping("/edit/{id}")
     String edit(@PathVariable Integer id, Model model) {
@@ -161,5 +165,11 @@ public class ItemController {
         return result;
     }
 
-
+    @PostMapping("/search")
+    String postSearch(@RequestParam String searchText, Model model) {
+        var result  =  itemRepository.fullTextSearch(searchText);
+        model.addAttribute("item", result);
+        model.addAttribute("pages", result.size());
+        return "list";
+    }
 }

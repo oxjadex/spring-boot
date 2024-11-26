@@ -19,7 +19,7 @@ public class commentController {
     @PostMapping("/add-comment")
     String writePost(String content, Integer parentId, Authentication authentication) {
         commentService.saveItem(authentication.getName(), content, parentId);
-        return "redirect:/list";
+        return String.format("redirect:/detail/%d", parentId);
     }
 
 

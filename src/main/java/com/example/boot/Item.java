@@ -8,6 +8,10 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
+@Table(indexes = {
+        @Index(name = "인덱스이름작명", columnList = "인덱스만들컬럼명1"),
+        @Index(name = "인덱스이름작명", columnList = "인덱스만들컬럼명2")
+})
 public class Item {
     @Id
 //    primary key로

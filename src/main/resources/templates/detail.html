@@ -18,8 +18,11 @@
       <input name="parentId" th:value="${item.id}" type="hidden">
       <button type="submit">댓글 달기</button>
   </form>
-  <div class="detail" th:each="c : ${comments}">
-      <h4 th:text="${c.content}"></h4>
+  <div >
+      <div class="comment" th:each="c : ${comments}">
+          <span th:text="${c.username}"></span>
+          <span th:text="${c.content}"></span>
+      </div>
   </div>
 </body>
 </html>

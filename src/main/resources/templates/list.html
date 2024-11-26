@@ -7,7 +7,8 @@
 </head>
 <body>
 <div th:replace="~{nav.html :: navbar}"></div>
-    <div class="card" th:each="i : ${item}">
+
+<div class="card" th:each="i : ${item}">
         <h4 th:text="${i.id}"></h4>
         <a th:href="@{'/edit/' + ${i.id} }">★</a>
         <div style="cursor:pointer"
